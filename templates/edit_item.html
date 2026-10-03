@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Listing - {{ item.title }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 760px;">
+
+  <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <h3 class="fw-bold mb-1">Edit Item Listing</h3>
+        <p class="text-muted small mb-0">Update details or change availability status.</p>
+      </div>
+      <a href="{{ url_for('item_detail', item_id=item.id) }}" class="btn btn-outline-secondary btn-sm rounded-pill">
+        View Listing
+      </a>
+    </div>
+
+    <form action="{{ url_for('edit_item', item_id=item.id) }}" method="POST" enctype="multipart/form-data">
+      
+      <!-- Item Title -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Item Title <span class="text-danger">*</span></label>
+        <input type="text" name="title" class="form-control rounded-3" value="{{ item.title }}" required>
+      </div>
+
+      <!-- Category & Listing Type -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
+          <select name="category" class="form-select rounded-3" required>
+            {% for cat in ['Stationery & Drawing', 'Electronics', 'Books', 'Lab & Medical', 'Bicycles & Sports', 'Dorm & Living', 'Other'] %}
+              <option value="{{ cat }}" {% if item.category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Listing Type <span class="text-danger">*</span></label>
+          <select name="item_type" class="form-select rounded-3" id="editItemTypeSelect" required>
+            <option value="Rent" {% if item.item_type == 'Rent' %}selected{% endif %}>Rent (Daily / Weekly charge)</option>
+            <option value="Borrow (Free)" {% if item.item_type == 'Borrow (Free)' %}selected{% endif %}>Borrow (Free short-term lending)</option>
+            <option value="Reuse (Giveaway)" {% if item.item_type == 'Reuse (Giveaway)' %}selected{% endif %}>Reuse (Giveaway / Keep permanently)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Pricing & Deposit -->
+      <div class="row g-3 mb-3">
+        <!-- Rental Price (Rent only) -->
+        <div class="col-md-6" id="editRentalContainer">
+          <label class="form-label fw-semibold">Rental Price (₹ per day)</label>
+          <div class="input-group">
+            <span class="input-group-text">₹</span>
+            <input type="number" step="1.00" min="0" name="price" id="editRentalInput" class="form-control rounded-end-3" value="{{ item.price }}">
+          </div>
+        </div>
+
+        <!-- Total Price (Reuse only) -->
+        <div class="col-md-6" id="editTotalContainer" style="display: none;">
+          <label class="form-label fw-semibold">Total Price (₹)</label>
+          <div class="input-group">
+            <span class="input-group-text">₹</span>
+            <input type="number" step="1.00" min="0" name="total_price" id="editTotalInput" class="form-control rounded-end-3" value="{{ item.price }}">
+          </div>
+        </div>
+
+        <!-- Security Deposit (Borrow & Rent) -->
+        <div class="col-md-6" id="editDepositContainer">
+          <label class="form-label fw-semibold">Security Deposit (₹)</label>
+          <div class="input-group">
+            <span class="input-group-text">₹</span>
+            <input type="number" step="1.00" min="0" name="deposit" id="editDepositInput" class="form-control rounded-end-3" value="{{ item.deposit }}">
+          </div>
+        </div>
+      </div>
+
+      <!-- Availability Status Toggle -->
+      <div class="mb-3 p-3 bg-light rounded-3 border">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="isAvailableSwitch" name="is_available" value="1" {% if item.is_available == 1 %}checked{% endif %}>
+          <label class="form-check-label fw-semibold" for="isAvailableSwitch">
+            Available for new requests
+          </label>
+        </div>
+        <small class="text-muted d-block mt-1">Uncheck this if the item is currently lent out or you want to temporarily hide it.</small>
+      </div>
+
+      <!-- Campus Handover Location -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Campus Handover Location <span class="text-danger">*</span></label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+          <input type="text" name="location" class="form-control rounded-end-3" value="{{ item.location }}" required>
+        </div>
+      </div>
+
+      <!-- Availability Dates -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Available From <span class="text-danger">*</span></label>
+          <input type="date" name="available_from" class="form-control rounded-3" value="{{ item.available_from }}" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Available Until <span class="text-danger">*</span></label>
+          <input type="date" name="available_until" class="form-control rounded-3" value="{{ item.available_until }}" required>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Item Description &amp; Condition <span class="text-danger">*</span></label>
+        <textarea name="description" class="form-control rounded-3" rows="4" required>{{ item.description }}</textarea>
+      </div>
+
+      <!-- Image Update (Optional) -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Change Photo (Optional)</label>
+        <div class="d-flex align-items-center gap-3 mb-2">
+          <img src="{{ item.image_path }}" alt="Current image" style="width: 70px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid #cbd5e1;">
+          <small class="text-muted">Current image displayed. Choose a new file to replace it.</small>
+        </div>
+        <input type="file" name="image" class="form-control rounded-3" accept="image/*">
+      </div>
+
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary rounded-pill py-2 fw-bold shadow-sm">
+          <i class="bi bi-check2-circle me-1"></i> Save Changes
+        </button>
+        <a href="{{ url_for('my_items') }}" class="btn btn-outline-secondary rounded-pill py-2">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<script>
+  (function() {
+    const typeSelect = document.getElementById('editItemTypeSelect');
+    const rentalContainer = document.getElementById('editRentalContainer');
+    const rentalInput = document.getElementById('editRentalInput');
+    const totalContainer = document.getElementById('editTotalContainer');
+    const totalInput = document.getElementById('editTotalInput');
+    const depositContainer = document.getElementById('editDepositContainer');
+    const depositInput = document.getElementById('editDepositInput');
+
+    function syncEditListingType(isInitial) {
+      const type = typeSelect.value;
+
+      if (type === 'Borrow (Free)') {
+        // 1. BORROW:
+        // Show ONLY: Security Deposit (₹)
+        // Hide: Rental Price, Total Price
+        rentalContainer.style.display = 'none';
+        rentalInput.disabled = true;
+        if (!isInitial) rentalInput.value = '';
+
+        totalContainer.style.display = 'none';
+        totalInput.disabled = true;
+        if (!isInitial) totalInput.value = '';
+
+        depositContainer.style.display = 'block';
+        depositInput.disabled = false;
+      } else if (type === 'Reuse (Giveaway)') {
+        // 3. REUSE:
+        // Show ONLY: Total Price (₹)
+        // Hide: Rental Price, Security Deposit
+        rentalContainer.style.display = 'none';
+        rentalInput.disabled = true;
+        if (!isInitial) rentalInput.value = '';
+
+        depositContainer.style.display = 'none';
+        depositInput.disabled = true;
+        if (!isInitial) depositInput.value = '';
+
+        totalContainer.style.display = 'block';
+        totalInput.disabled = false;
+      } else {
+        // 2. RENT:
+        // Show: Rental Price (₹ per day), Security Deposit (₹)
+        // Hide: Total Price
+        totalContainer.style.display = 'none';
+        totalInput.disabled = true;
+        if (!isInitial) totalInput.value = '';
+
+        rentalContainer.style.display = 'block';
+        rentalInput.disabled = false;
+
+        depositContainer.style.display = 'block';
+        depositInput.disabled = false;
+      }
+    }
+
+    typeSelect.addEventListener('change', function() {
+      syncEditListingType(false);
+    });
+
+    // Run on load
+    syncEditListingType(true);
+  })();
+</script>
+{% endblock %}

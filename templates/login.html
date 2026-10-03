@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Log In - ReCraft{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 70vh;">
+
+  <div class="glass-panel p-4 p-md-5 w-100" style="max-width: 480px;">
+    <div class="text-center mb-4">
+      <div class="avatar-circle mx-auto mb-3" style="width: 56px; height: 56px; font-size: 1.5rem; background: linear-gradient(135deg, var(--navy-light), var(--purple-accent));">
+        <i class="bi bi-box-arrow-in-right"></i>
+      </div>
+      <h3 class="fw-bold mb-1">Welcome Back</h3>
+      <p class="text-muted small">Sign in to your ReCraft campus account.</p>
+    </div>
+
+
+    <form action="{{ url_for('login', next=request.args.get('next')) }}" method="POST">
+      <div class="mb-3">
+        <label class="form-label fw-semibold text-muted">Campus Email</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+          <input type="email" name="email" class="form-control" placeholder="you@campus.edu" required autofocus>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-muted">Password</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-lock"></i></span>
+          <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+        </div>
+      </div>
+
+      <div class="d-grid mb-4">
+        <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-6">
+          Log In
+        </button>
+      </div>
+
+      <div class="text-center small text-muted">
+        Don't have an account yet? 
+        <a href="{{ url_for('signup') }}" class="text-info fw-semibold text-decoration-none">Create an Account</a>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

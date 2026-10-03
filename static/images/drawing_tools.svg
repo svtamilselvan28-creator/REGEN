@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="toolGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d9488" />
+      <stop offset="100%" stop-color="#115e59" />
+    </linearGradient>
+    <filter id="boxShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <rect width="600" height="400" fill="url(#toolGrad)"/>
+  <!-- Instrument Box Container -->
+  <g filter="url(#boxShadow)" transform="translate(130, 45)">
+    <rect x="0" y="0" width="340" height="280" rx="16" fill="#1e293b" stroke="#334155" stroke-width="4"/>
+    <rect x="15" y="15" width="310" height="250" rx="10" fill="#0f172a"/>
+    <!-- Compass Tool -->
+    <path d="M 80 40 L 50 220 M 80 40 L 110 220" stroke="#f1f5f9" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="80" cy="40" r="14" fill="#38bdf8"/>
+    <circle cx="80" cy="120" r="8" fill="#f59e0b"/>
+    <!-- Divider Tool -->
+    <path d="M 180 40 L 155 220 M 180 40 L 205 220" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="180" cy="40" r="12" fill="#38bdf8"/>
+    <!-- Set Square (Triangle) -->
+    <polygon points="230,230 300,230 300,80" fill="#38bdf8" fill-opacity="0.2" stroke="#38bdf8" stroke-width="3"/>
+    <polygon points="250,215 285,215 285,130" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+  </g>
+  <text x="300" y="370" font-family="'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="600" fill="#f0fdf4" text-anchor="middle">Engineering Drawing Tool Set</text>
+</svg>

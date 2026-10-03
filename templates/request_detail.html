@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Request #{{ req.id }} - ReCraft{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 860px;">
+
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{{ url_for('requests_dashboard') }}" class="text-decoration-none">Requests</a></li>
+      <li class="breadcrumb-item active">Request #{{ req.id }}</li>
+    </ol>
+  </nav>
+
+  <!-- Request Summary Card -->
+  <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+    <div class="row g-4 align-items-center">
+      <div class="col-md-3 text-center text-md-start">
+        <img src="{{ req.item_image }}" alt="{{ req.item_title }}" class="img-fluid rounded-3 shadow-sm" style="max-height: 120px; object-fit: cover;">
+      </div>
+      <div class="col-md-5">
+        <span class="badge bg-light text-secondary border mb-1">{{ req.category }}</span>
+        <h5 class="fw-bold mb-1">
+          <a href="{{ url_for('item_detail', item_id=req.item_id) }}" class="text-decoration-none text-dark">
+            {{ req.item_title }}
+          </a>
+        </h5>
+        <div class="small text-muted mb-1">
+          <i class="bi bi-geo-alt-fill text-danger me-1"></i> Meeting Spot: {{ req.item_location }}
+        </div>
+        <div class="small text-muted">
+          <i class="bi bi-calendar-range text-primary me-1"></i> Dates: <strong>{{ req.start_date }}</strong> to <strong>{{ req.end_date }}</strong>
+        </div>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <div class="mb-2">
+          {% if req.status == 'Pending' %}
+            <span class="status-badge status-pending">
+              <i class="bi bi-hourglass-split"></i> Pending
+            </span>
+          {% elif req.status == 'Accepted' %}
+            <span class="status-badge status-accepted">
+              <i class="bi bi-check-circle-fill"></i> Accepted
+            </span>
+          {% elif req.status == 'Rejected' %}
+            <span class="status-badge status-rejected">
+              <i class="bi bi-x-circle-fill"></i> Declined
+            </span>
+          {% endif %}
+        </div>
+
+        {% if is_owner and req.status == 'Pending' %}
+          <div class="d-flex justify-content-md-end gap-2 mt-3">
+            <form action="{{ url_for('respond_request', request_id=req.id, action='accept') }}" method="POST">
+              <button type="submit" class="btn btn-success btn-sm rounded-pill px-3 fw-semibold">Accept</button>
+            </form>
+            <form action="{{ url_for('respond_request', request_id=req.id, action='reject') }}" method="POST">
+              <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-semibold">Decline</button>
+            </form>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact & Handover Card (Revealed when Accepted) -->
+  {% if req.status == 'Accepted' %}
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white border-start border-4 border-success">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <i class="bi bi-check-circle-fill text-success fs-4"></i>
+        <h5 class="fw-bold mb-0 text-success">Rental Confirmed - Contact &amp; Handover Details</h5>
+      </div>
+      <p class="small text-muted mb-3">
+        Use the details below or the internal message thread to coordinate meeting on campus for handover.
+      </p>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="p-3 bg-light rounded-3">
+            <small class="text-muted fw-bold text-uppercase d-block mb-1">Item Owner</small>
+            <div class="fw-bold">{{ req.owner_name }}</div>
+            <div class="small text-muted"><i class="bi bi-envelope me-1"></i> {{ req.owner_email }}</div>
+            {% if req.owner_phone %}
+              <div class="small text-muted"><i class="bi bi-telephone me-1"></i> {{ req.owner_phone }}</div>
+            {% endif %}
+            <div class="small text-muted"><i class="bi bi-building me-1"></i> {{ req.owner_college }}</div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="p-3 bg-light rounded-3">
+            <small class="text-muted fw-bold text-uppercase d-block mb-1">Student Borrower</small>
+            <div class="fw-bold">{{ req.requester_name }}</div>
+            <div class="small text-muted"><i class="bi bi-envelope me-1"></i> {{ req.requester_email }}</div>
+            {% if req.requester_phone %}
+              <div class="small text-muted"><i class="bi bi-telephone me-1"></i> {{ req.requester_phone }}</div>
+            {% endif %}
+            <div class="small text-muted"><i class="bi bi-building me-1"></i> {{ req.requester_college }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% elif req.status == 'Pending' %}
+    <div class="alert alert-warning border-0 rounded-4 p-3 mb-4 d-flex align-items-center gap-2">
+      <i class="bi bi-hourglass-split fs-4"></i>
+      <div>
+        <strong>Awaiting Owner Confirmation:</strong> Once the owner clicks "Accept", direct phone and email contact info will be unlocked here.
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Internal Messages Card -->
+  <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3">
+      <h5 class="fw-bold mb-0">
+        <i class="bi bi-chat-left-text me-2 text-primary"></i> Internal Messages
+      </h5>
+      <span class="small text-muted">{{ messages|length }} message{% if messages|length != 1 %}s{% endif %}</span>
+    </div>
+
+    <!-- Initial Request Note -->
+    {% if req.message %}
+      <div class="p-3 bg-light rounded-3 mb-3 border-start border-3 border-primary">
+        <small class="text-muted fw-bold d-block mb-1">Initial note from {{ req.requester_name }}:</small>
+        <div class="text-dark small">"{{ req.message }}"</div>
+        <small class="text-muted d-block mt-1">{{ req.created_at.slice(0, 16) }}</small>
+      </div>
+    {% endif %}
+
+    <!-- Message Stream -->
+    <div class="mb-4" style="max-height: 400px; overflow-y: auto;">
+      {% if messages %}
+        {% for msg in messages %}
+          {% set is_me = (msg.sender_id == session.get('user_id')) %}
+          <div class="d-flex flex-column mb-3 {% if is_me %}align-items-end{% else %}align-items-start{% endif %}">
+            <div class="small text-muted mb-1 px-1">
+              {% if is_me %}You{% else %}{{ msg.sender_name }}{% endif %} • {{ msg.created_at.slice(11, 16) }} ({{ msg.created_at.slice(0, 10) }})
+            </div>
+            <div class="chat-bubble {% if is_me %}chat-bubble-me{% else %}chat-bubble-other{% endif %} shadow-sm">
+              {{ msg.message }}
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="text-center py-4 text-muted small">
+          <i class="bi bi-chat-dots fs-3 d-block mb-2"></i>
+          No messages yet. Send a note below to arrange handover times or ask questions!
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Send Message Form -->
+    <form action="{{ url_for('send_request_message', request_id=req.id) }}" method="POST">
+      <div class="input-group">
+        <input type="text" name="message" class="form-control rounded-start-pill px-3" placeholder="Type a message to coordinate campus handover..." required>
+        <button type="submit" class="btn btn-primary rounded-end-pill px-4 fw-semibold">
+          <i class="bi bi-send-fill me-1"></i> Send
+        </button>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
+

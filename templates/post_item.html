@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Post an Unused Item - ReCraft{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 760px;">
+
+  <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+    <div class="text-center mb-4">
+      <div class="avatar-circle mx-auto mb-2" style="width: 52px; height: 52px; font-size: 1.3rem;">
+        <i class="bi bi-plus-lg"></i>
+      </div>
+      <h3 class="fw-bold mb-1">List an Item for Students</h3>
+      <p class="text-muted small">Share your unused books, drafters, tech, or gear with fellow students.</p>
+    </div>
+
+    <form action="{{ url_for('post_item') }}" method="POST" enctype="multipart/form-data">
+      
+      <!-- Item Title -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Item Title <span class="text-danger">*</span></label>
+        <input type="text" name="title" class="form-control rounded-3" placeholder="e.g. Engineering Mini Drafter, TI-84 Plus, Calculus Textbook" required>
+      </div>
+
+      <!-- Category & Listing Type -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
+          <select name="category" class="form-select rounded-3" required id="categorySelect">
+            <option value="" disabled selected>Select a category...</option>
+            <option value="Stationery & Drawing">Stationery &amp; Drawing</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Books">Books &amp; Study Material</option>
+            <option value="Lab & Medical">Lab &amp; Medical Gear</option>
+            <option value="Bicycles & Sports">Bicycles &amp; Sports</option>
+            <option value="Dorm & Living">Dorm &amp; Living</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Listing Type <span class="text-danger">*</span></label>
+          <select name="item_type" class="form-select rounded-3" id="itemTypeSelect" required>
+            <option value="Rent" selected>Rent (Daily / Weekly charge)</option>
+            <option value="Borrow (Free)">Borrow (Free short-term lending)</option>
+            <option value="Reuse (Giveaway)">Reuse (Giveaway / Keep permanently)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Pricing & Deposit -->
+      <div class="row g-3 mb-3">
+        <!-- Rental Price (Rent only) -->
+        <div class="col-md-6" id="rentalPriceContainer">
+          <label class="form-label fw-semibold">Rental Price (₹ per day)</label>
+          <div class="input-group">
+            <span class="input-group-text">₹</span>
+            <input type="number" step="1.00" min="0" name="price" id="priceInput" class="form-control rounded-end-3" placeholder="0.00" value="0.00">
+          </div>
+          <small class="text-muted">Enter daily rental charge.</small>
+        </div>
+
+        <!-- Total Price (Reuse only) -->
+        <div class="col-md-6" id="totalPriceContainer" style="display: none;">
+          <label class="form-label fw-semibold">Total Price (₹)</label>
+          <div class="input-group">
+            <span class="input-group-text">₹</span>
+            <input type="number" step="1.00" min="0" name="total_price" id="totalPriceInput" class="form-control rounded-end-3" placeholder="0.00" value="0.00" disabled>
+          </div>
+          <small class="text-muted">Enter 0.00 for a free giveaway, or the total sale price.</small>
+        </div>
+
+        <!-- Security Deposit (Borrow & Rent) -->
+        <div class="col-md-6" id="securityDepositContainer">
+          <label class="form-label fw-semibold">Security Deposit (₹)</label>
+          <div class="input-group">
+            <span class="input-group-text">₹</span>
+            <input type="number" step="1.00" min="0" name="deposit" id="depositInput" class="form-control rounded-end-3" placeholder="0.00" value="0.00">
+          </div>
+          <small class="text-muted">Refundable deposit to protect your item.</small>
+        </div>
+      </div>
+
+      <!-- Campus Handover Location -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Campus Handover Location <span class="text-danger">*</span></label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+          <input type="text" name="location" class="form-control rounded-end-3" placeholder="e.g. Science Library Foyer, Engineering Hall B, Dorm 3" required>
+        </div>
+        <small class="text-muted">Choose a public, well-lit campus spot for safe exchanges.</small>
+      </div>
+
+      <!-- Availability Dates -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Available From <span class="text-danger">*</span></label>
+          <input type="date" name="available_from" class="form-control rounded-3" value="{{ today_iso }}" min="{{ today_iso }}" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Available Until <span class="text-danger">*</span></label>
+          <input type="date" name="available_until" class="form-control rounded-3" required>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Item Description &amp; Condition <span class="text-danger">*</span></label>
+        <textarea name="description" class="form-control rounded-3" rows="4" placeholder="Mention item condition, edition (for books), included accessories (chargers, cases), and any special rules..." required></textarea>
+      </div>
+
+      <!-- Image Upload or Preset Illustration -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Item Photo</label>
+        <input type="file" name="image" class="form-control rounded-3" accept="image/*">
+        <small class="text-muted">Upload an image file (PNG, JPG, JPEG) or leave empty to automatically assign a clean category illustration.</small>
+      </div>
+
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary rounded-pill py-2 fw-bold shadow-sm">
+          <i class="bi bi-check2-circle me-1"></i> Publish Item Listing
+        </button>
+        <a href="{{ url_for('browse') }}" class="btn btn-outline-secondary rounded-pill py-2">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<script>
+  (function() {
+    const typeSelect = document.getElementById('itemTypeSelect');
+    const rentalContainer = document.getElementById('rentalPriceContainer');
+    const rentalInput = document.getElementById('priceInput');
+    const totalContainer = document.getElementById('totalPriceContainer');
+    const totalInput = document.getElementById('totalPriceInput');
+    const depositContainer = document.getElementById('securityDepositContainer');
+    const depositInput = document.getElementById('depositInput');
+
+    function syncListingType(isInitial) {
+      const type = typeSelect.value;
+
+      if (type === 'Borrow (Free)') {
+        // 1. BORROW:
+        // Show ONLY: Security Deposit (₹)
+        // Hide: Rental Price, Total Price
+        rentalContainer.style.display = 'none';
+        rentalInput.disabled = true;
+        if (!isInitial) rentalInput.value = '';
+
+        totalContainer.style.display = 'none';
+        totalInput.disabled = true;
+        if (!isInitial) totalInput.value = '';
+
+        depositContainer.style.display = 'block';
+        depositInput.disabled = false;
+      } else if (type === 'Reuse (Giveaway)') {
+        // 3. REUSE:
+        // Show ONLY: Total Price (₹)
+        // Hide: Rental Price, Security Deposit
+        rentalContainer.style.display = 'none';
+        rentalInput.disabled = true;
+        if (!isInitial) rentalInput.value = '';
+
+        depositContainer.style.display = 'none';
+        depositInput.disabled = true;
+        if (!isInitial) depositInput.value = '';
+
+        totalContainer.style.display = 'block';
+        totalInput.disabled = false;
+      } else {
+        // 2. RENT:
+        // Show: Rental Price (₹ per day), Security Deposit (₹)
+        // Hide: Total Price
+        totalContainer.style.display = 'none';
+        totalInput.disabled = true;
+        if (!isInitial) totalInput.value = '';
+
+        rentalContainer.style.display = 'block';
+        rentalInput.disabled = false;
+
+        depositContainer.style.display = 'block';
+        depositInput.disabled = false;
+      }
+    }
+
+    typeSelect.addEventListener('change', function() {
+      syncListingType(false);
+    });
+
+    // Run on load
+    syncListingType(true);
+  })();
+</script>
+{% endblock %}
+

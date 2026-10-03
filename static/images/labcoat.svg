@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="labGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0369a1" />
+    </linearGradient>
+    <filter id="labShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="600" height="400" fill="url(#labGrad)"/>
+  <!-- Lab Coat & Safety Goggles -->
+  <g filter="url(#labShadow)">
+    <!-- Coat Body -->
+    <path d="M 220 120 L 260 70 L 340 70 L 380 120 L 370 310 L 230 310 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+    <!-- Sleeves -->
+    <path d="M 220 120 L 160 210 L 195 225 L 240 160 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <path d="M 380 120 L 440 210 L 405 225 L 360 160 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <!-- Collar & Lapels -->
+    <path d="M 260 70 L 290 150 L 300 150 L 300 310" stroke="#94a3b8" stroke-width="3" fill="none"/>
+    <path d="M 340 70 L 310 150 L 300 150" stroke="#94a3b8" stroke-width="3" fill="none"/>
+    <!-- Buttons -->
+    <circle cx="295" cy="180" r="4" fill="#64748b"/>
+    <circle cx="295" cy="220" r="4" fill="#64748b"/>
+    <circle cx="295" cy="260" r="4" fill="#64748b"/>
+    <!-- Breast Pocket with pen -->
+    <rect x="245" y="165" width="30" height="35" rx="3" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+    <line x1="255" y1="155" x2="255" y2="175" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
+    <!-- Safety Goggles floating above -->
+    <g transform="translate(235, 30)">
+      <rect x="10" y="0" width="48" height="32" rx="12" fill="#38bdf8" fill-opacity="0.4" stroke="#0f172a" stroke-width="3"/>
+      <rect x="72" y="0" width="48" height="32" rx="12" fill="#38bdf8" fill-opacity="0.4" stroke="#0f172a" stroke-width="3"/>
+      <line x1="58" y1="16" x2="72" y2="16" stroke="#0f172a" stroke-width="4"/>
+    </g>
+  </g>
+  <text x="300" y="370" font-family="'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="600" fill="#f0f9ff" text-anchor="middle">Chemistry Lab Coat &amp; Safety Goggles</text>
+</svg>

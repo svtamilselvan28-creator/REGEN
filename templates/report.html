@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Report Listing or User - ReCraft{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 580px;">
+
+  <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+    <div class="text-center mb-4">
+      <div class="avatar-circle mx-auto mb-2 bg-danger-subtle text-danger" style="width: 52px; height: 52px; font-size: 1.3rem;">
+        <i class="bi bi-flag-fill"></i>
+      </div>
+      <h3 class="fw-bold mb-1">Campus Safety Report</h3>
+      <p class="text-muted small">Help keep our student community safe, honest, and respectful.</p>
+    </div>
+
+    <div class="p-3 bg-light rounded-3 mb-4 small text-secondary">
+      <strong>Reporting Target:</strong> {{ target_name }} ({{ target_type | capitalize }})
+    </div>
+
+    <form action="{{ url_for('report', target_type=target_type, target_id=target_id) }}" method="POST">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Reason for Report <span class="text-danger">*</span></label>
+        <select name="reason" class="form-select rounded-3" required>
+          <option value="" disabled selected>Select a reason...</option>
+          <option value="Prohibited or dangerous item">Prohibited or dangerous item</option>
+          <option value="Inaccurate description or counterfeit">Inaccurate description or counterfeit</option>
+          <option value="Unresponsive or missed campus handover">Unresponsive or missed campus handover</option>
+          <option value="Suspicious behavior or scam attempt">Suspicious behavior or scam attempt</option>
+          <option value="Inappropriate communications">Inappropriate communications</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Details / Context</label>
+        <textarea name="details" class="form-control rounded-3" rows="4" placeholder="Please describe what happened so our campus moderation team can review..." required></textarea>
+      </div>
+
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-danger rounded-pill py-2 fw-bold shadow-sm">
+          Submit Report
+        </button>
+        <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill py-2">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
+

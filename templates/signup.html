@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - ReCraft{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center py-5">
+
+  <div class="glass-panel p-4 p-md-5 w-100" style="max-width: 540px;">
+    <div class="text-center mb-4">
+      <div class="avatar-circle mx-auto mb-3" style="width: 56px; height: 56px; font-size: 1.5rem; background: linear-gradient(135deg, var(--navy-light), var(--cyan-accent));">
+        <i class="bi bi-person-plus"></i>
+      </div>
+      <h3 class="fw-bold mb-1">Join ReCraft</h3>
+      <p class="text-muted small">Create your student account to start sharing on campus.</p>
+    </div>
+
+    <form action="{{ url_for('signup') }}" method="POST">
+      <!-- Full Name -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold text-muted">Full Name <span class="text-pink" style="color: var(--pink-highlight);">*</span></label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-person"></i></span>
+          <input type="text" name="name" class="form-control" placeholder="e.g. Alex Johnson" required autofocus>
+        </div>
+      </div>
+
+      <!-- Campus Email -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold text-muted">Student Email <span class="text-pink" style="color: var(--pink-highlight);">*</span></label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+          <input type="email" name="email" class="form-control" placeholder="e.g. alex@college.edu" required>
+        </div>
+        <small class="text-muted" style="font-size: 0.75rem;">Use your student email for automatic campus verification.</small>
+      </div>
+
+      <!-- College / Campus Department -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold text-muted">Campus / Dorm / Department <span class="text-pink" style="color: var(--pink-highlight);">*</span></label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-building"></i></span>
+          <input type="text" name="college" class="form-control" placeholder="e.g. North Dorms" required>
+        </div>
+      </div>
+
+      <!-- Phone Number -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold text-muted">Phone / WhatsApp (Optional)</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+          <input type="tel" name="phone" class="form-control" placeholder="+1 (555) 000-0000">
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="row g-3 mb-4">
+        <div class="col-sm-6">
+          <label class="form-label fw-semibold text-muted">Password <span class="text-pink" style="color: var(--pink-highlight);">*</span></label>
+          <input type="password" name="password" class="form-control" placeholder="Min 6 chars" minlength="6" required>
+        </div>
+        <div class="col-sm-6">
+          <label class="form-label fw-semibold text-muted">Confirm <span class="text-pink" style="color: var(--pink-highlight);">*</span></label>
+          <input type="password" name="confirm_password" class="form-control" placeholder="Repeat password" minlength="6" required>
+        </div>
+      </div>
+
+      <div class="d-grid mb-4">
+        <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-6">
+          Create Account
+        </button>
+      </div>
+
+      <div class="text-center small text-muted">
+        Already have an account? 
+        <a href="{{ url_for('login') }}" class="text-info fw-semibold text-decoration-none">Log In</a>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

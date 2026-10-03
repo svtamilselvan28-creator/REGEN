@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="elecGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <filter id="elecShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect width="600" height="400" fill="url(#elecGrad)"/>
+  <!-- Electronics / Microcontroller Board -->
+  <g filter="url(#elecShadow)" transform="translate(130, 45)">
+    <!-- PCB Board (Teal / Blue) -->
+    <rect x="0" y="0" width="340" height="260" rx="14" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/>
+    <!-- Gold Contact Holes -->
+    <circle cx="20" cy="20" r="7" fill="#fbbf24"/>
+    <circle cx="320" cy="20" r="7" fill="#fbbf24"/>
+    <circle cx="20" cy="240" r="7" fill="#fbbf24"/>
+    <circle cx="320" cy="240" r="7" fill="#fbbf24"/>
+    <!-- USB Port -->
+    <rect x="-15" y="40" width="40" height="45" rx="4" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+    <!-- Power Jack -->
+    <rect x="-15" y="180" width="45" height="50" rx="4" fill="#1e293b"/>
+    <!-- Main Microcontroller Chip (IC) -->
+    <rect x="110" y="80" width="120" height="100" rx="8" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+    <text x="170" y="135" font-family="Courier, monospace" font-size="14" fill="#e2e8f0" font-weight="bold" text-anchor="middle">ATmega328P</text>
+    <!-- IC Pins -->
+    <g fill="#cbd5e1">
+      <rect x="120" y="70" width="6" height="10"/>
+      <rect x="140" y="70" width="6" height="10"/>
+      <rect x="160" y="70" width="6" height="10"/>
+      <rect x="180" y="70" width="6" height="10"/>
+      <rect x="200" y="70" width="6" height="10"/>
+      <rect x="120" y="180" width="6" height="10"/>
+      <rect x="140" y="180" width="6" height="10"/>
+      <rect x="160" y="180" width="6" height="10"/>
+      <rect x="180" y="180" width="6" height="10"/>
+      <rect x="200" y="180" width="6" height="10"/>
+    </g>
+    <!-- Pin Headers -->
+    <rect x="40" y="15" width="260" height="18" rx="3" fill="#1e293b"/>
+    <rect x="40" y="225" width="260" height="18" rx="3" fill="#1e293b"/>
+    <!-- Status LEDs -->
+    <circle cx="80" cy="90" r="5" fill="#22c55e"/>
+    <circle cx="80" cy="115" r="5" fill="#ef4444"/>
+  </g>
+  <text x="300" y="365" font-family="'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="600" fill="#38bdf8" text-anchor="middle">Electronics &amp; Sensor Starter Kit</text>
+</svg>

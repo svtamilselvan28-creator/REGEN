@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="defGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <filter id="defShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <rect width="600" height="400" fill="url(#defGrad)"/>
+  <!-- Package / Item Box Illustration -->
+  <g filter="url(#defShadow)" transform="translate(180, 80)">
+    <!-- Box isometric perspective -->
+    <polygon points="120,20 220,70 120,120 20,70" fill="#f59e0b"/>
+    <polygon points="20,70 120,120 120,210 20,160" fill="#d97706"/>
+    <polygon points="120,120 220,70 220,160 120,210" fill="#b45309"/>
+    <!-- Packing tape -->
+    <polygon points="105,27 135,42 135,127 105,112" fill="#78350f" fill-opacity="0.5"/>
+    <!-- Recycled arrows emblem -->
+    <circle cx="120" cy="165" r="22" fill="#ffffff" fill-opacity="0.9"/>
+    <path d="M 120 150 L 126 158 L 114 158 Z M 132 170 L 126 178 L 122 168 Z M 108 170 L 118 168 L 114 178 Z" fill="#059669"/>
+  </g>
+  <text x="300" y="350" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="600" fill="#e2e8f0" text-anchor="middle">Student Item Listing</text>
+  <text x="300" y="375" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Rent • Borrow • Reuse</text>
+</svg>
